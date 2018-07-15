@@ -1,1 +1,0 @@
-GODEBUG=http2debug=2   # ... even more verbose, with frame dumps

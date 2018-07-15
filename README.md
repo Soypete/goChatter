@@ -2,7 +2,8 @@
 chat server written in go
 
 ##Explanation
-This chat server what build following an exercise in _The Go Programming Language_ by: Alan A.a. Donovan and Brian W. Kernighan
+This chat server what build following an exercise in _The Go Programming Language_ by: Alan A.a. Donovan and Brian W. Kernighan 
+[githubrepo](https://github.com/adonovan/gopl.io/tree/master/ch8)
 
 ## Other Resource Used
 http://choly.ca/post/go-experiments-with-handler/
