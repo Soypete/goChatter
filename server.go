@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log"
 	"net"
+
+	"github.com/davecgh/go-spew/spew"
 )
 
 type client chan<- string
@@ -13,9 +15,10 @@ var (
 	incoming = make(chan client)
 	outgoing = make(chan client)
 	messages = make(chan string)
+	port     string
 )
 
-// records list of activr clients published messages
+// records list of active clients published messages
 func broadcaster() {
 	clients := make(map[client]bool)
 	for {
@@ -58,19 +61,32 @@ func clientWriter(conn net.Conn, ch <-chan string) {
 	}
 }
 
+//TODO: Add flags to start server and add client
+//allow only one used
+//add method for closing server
+//make setup script do that only client operation run manully
+
 func main() {
-	listener, err := net.Listen("tcp", "localhost:8000")
+	listener, err := net.Listen("tcp", "localhost:8080")
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	defer listener.Close()
+
+	log.Println("listener running")
+	spew.Dump(listener.Addr())
+
 	go broadcaster()
+	log.Println("broadcast running")
 	for {
 		conn, err := listener.Accept()
+		spew.Dump(conn)
 		if err != nil {
 			log.Print(err)
 			continue
 		}
 		go handleConn(conn)
+		log.Println("connection made")
 	}
 }
