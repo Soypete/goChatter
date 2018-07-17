@@ -3,6 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
+
+	"github.com/SoyPete/goChatter/server"
 )
 
 func main() {
@@ -13,6 +15,8 @@ func main() {
 
 	user := flag.Bool("user", false, "adds a chat client to the server")
 
+	close := flag.Bool("close", false, "closes the server")
+
 	flag.StringVar(&port, "port", "8081", "the port that a chat user will be user")
 
 	flag.Parse()
@@ -20,12 +24,15 @@ func main() {
 	fmt.Println("user:", *user)
 	fmt.Println("svar:", port)
 	if *user {
-		server.Client(port)
+		svr.Client(port)
 		return
 	}
 	fmt.Println("server:", *server)
 	if *server {
-		server.RunServer()
+		svr.RunServer()
+	}
+	if *close {
+		svr.Listener.Close()
 	}
 
 }

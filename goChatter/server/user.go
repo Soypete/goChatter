@@ -1,4 +1,4 @@
-package server
+package svr
 
 import (
 	"fmt"
@@ -6,6 +6,8 @@ import (
 	"log"
 	"net"
 	"os"
+
+	"github.com/davecgh/go-spew/spew"
 )
 
 // Client creates a client that can chat on server
@@ -13,6 +15,8 @@ func Client(port string) {
 	url := fmt.Sprintf("localhost:%s", port)
 
 	conn, err := net.Dial("tcp", url)
+	spew.Dump(conn)
+	spew.Dump(err)
 	if err != nil {
 		log.Fatal(err)
 	}

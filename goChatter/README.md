@@ -2,7 +2,7 @@
 chat server written in go
 
 
-*NOT WORKING*
+# Usage 
 
 ## Explanation
 This chat server what build following an exercise in _The Go Programming Language_ by: Alan A.a. Donovan and Brian W. Kernighan 

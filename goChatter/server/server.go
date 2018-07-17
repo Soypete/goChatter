@@ -1,4 +1,4 @@
-package server
+package svr
 
 import (
 	"bufio"
@@ -16,6 +16,8 @@ var (
 	outgoing = make(chan client)
 	messages = make(chan string)
 	port     string
+	//Listener is what the clients connect to.
+	Listener net.Listener
 )
 
 // records list of active clients published messages
@@ -61,31 +63,28 @@ func clientWriter(conn net.Conn, ch <-chan string) {
 	}
 }
 
-//TODO: Add flags to start server and add client
+//TODO:
 //use script to set up server
 //allow only one used
-// use tags to add user verse setup server...
-///
-
 //add method for closing server
 //make setup script do that only client operation run manully
 
 // RunServer starts the chat server that the users will connect to
 func RunServer() {
-	listener, err := net.Listen("tcp", "localhost:8080")
+	Listener, err := net.Listen("tcp", "localhost:8080")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	defer listener.Close()
+	defer Listener.Close()
 
 	log.Println("listener running")
-	spew.Dump(listener.Addr())
+	spew.Dump(Listener.Addr())
 
 	go broadcaster()
 	log.Println("broadcast running")
 	for {
-		conn, err := listener.Accept()
+		conn, err := Listener.Accept()
 		spew.Dump(conn)
 		if err != nil {
 			log.Print(err)
