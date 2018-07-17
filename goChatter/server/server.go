@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net"
-
-	"github.com/davecgh/go-spew/spew"
 )
 
 type client chan<- string
@@ -79,13 +77,11 @@ func RunServer() {
 	defer Listener.Close()
 
 	log.Println("listener running")
-	spew.Dump(Listener.Addr())
 
 	go broadcaster()
 	log.Println("broadcast running")
 	for {
 		conn, err := Listener.Accept()
-		spew.Dump(conn)
 		if err != nil {
 			log.Print(err)
 			continue

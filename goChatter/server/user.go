@@ -11,8 +11,8 @@ import (
 )
 
 // Client creates a client that can chat on server
-func Client(port string) {
-	url := fmt.Sprintf("localhost:%s", port)
+func Client() {
+	url := fmt.Sprintf("localhost:8080")
 
 	conn, err := net.Dial("tcp", url)
 	spew.Dump(conn)
