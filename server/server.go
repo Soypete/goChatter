@@ -61,12 +61,6 @@ func clientWriter(conn net.Conn, ch <-chan string) {
 	}
 }
 
-//TODO:
-//use script to set up server
-//allow only one used
-//add method for closing server
-//make setup script do that only client operation run manully
-
 // RunServer starts the chat server that the users will connect to
 func RunServer() {
 	Listener, err := net.Listen("tcp", "localhost:8080")

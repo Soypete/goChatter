@@ -1,5 +1,10 @@
 package main
 
+//TODO:
+//use script to set up server
+//allow only one used
+//add method for closing server
+//make setup script do that only client operation run manully
 import (
 	"flag"
 
@@ -7,8 +12,6 @@ import (
 )
 
 func main() {
-
-	var port string
 
 	server := flag.Bool("server", false, "starts the server")
 
