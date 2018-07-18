@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log"
 	"net"
+
+	main "github.com/Soypete/goChatter/addUser"
 )
 
 type client chan<- string
@@ -16,8 +18,6 @@ var (
 	port     string
 	//Listener is what the clients connect to.
 	Listener net.Listener
-
-	users = make(map[net.Conn]string)
 )
 
 // records list of active clients published messages
@@ -38,11 +38,10 @@ func broadcaster() {
 	}
 }
 
-func handleConn(conn net.Conn) {
-	ch := make(chan string)
+func handleConn(conn net.Conn, ch chan string) {
 	go clientWriter(conn, ch)
 
-	who := users[conn]
+	who := main.Users[conn]
 	ch <- "You are " + who
 	messages <- who + "has arrived"
 	messages <- who + " has arrived"
@@ -59,12 +58,13 @@ func handleConn(conn net.Conn) {
 
 func clientWriter(conn net.Conn, ch <-chan string) {
 	for msg := range ch {
-		fmt.Println(users[conn], msg)
+		newmsg := fmt.Sprintln(msg)
+		fmt.Fprintln(conn, newmsg)
 	}
 }
 
 // RunServer starts the chat server that the users will connect to
-func RunServer(name string) {
+func RunServer() {
 	Listener, err := net.Listen("tcp", "localhost:8080")
 	if err != nil {
 		log.Fatal(err)
@@ -82,14 +82,9 @@ func RunServer(name string) {
 			log.Print(err)
 			continue
 		}
-		AddUser(name, conn)
-		go handleConn(conn)
+		ch := make(chan string)
+		go handleConn(conn, ch)
 		log.Println("connection made")
 
 	}
-}
-
-// AddUser adds users to this session of the
-func AddUser(name string, conn net.Conn) {
-	users[conn] = name
 }

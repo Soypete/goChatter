@@ -2,7 +2,7 @@ package main
 
 //TODO:
 //allow only one used
-//add method for closing server
+//tests
 import (
 	"flag"
 
@@ -20,11 +20,11 @@ func main() {
 	flag.Parse()
 
 	if *client {
-		svr.Client()
+		svr.Client(name)
 		return
 	}
 	if *server {
-		svr.RunServer(*name)
+		svr.RunServer()
 	}
 
 }
