@@ -16,6 +16,8 @@ var (
 	port     string
 	//Listener is what the clients connect to.
 	Listener net.Listener
+
+	users = make(map[net.Conn]string)
 )
 
 // records list of active clients published messages
@@ -40,7 +42,7 @@ func handleConn(conn net.Conn) {
 	ch := make(chan string)
 	go clientWriter(conn, ch)
 
-	who := conn.RemoteAddr().String()
+	who := users[conn]
 	ch <- "You are " + who
 	messages <- who + "has arrived"
 	messages <- who + " has arrived"
@@ -57,12 +59,12 @@ func handleConn(conn net.Conn) {
 
 func clientWriter(conn net.Conn, ch <-chan string) {
 	for msg := range ch {
-		fmt.Fprintln(conn, msg)
+		fmt.Println(users[conn], msg)
 	}
 }
 
 // RunServer starts the chat server that the users will connect to
-func RunServer() {
+func RunServer(name string) {
 	Listener, err := net.Listen("tcp", "localhost:8080")
 	if err != nil {
 		log.Fatal(err)
@@ -80,7 +82,14 @@ func RunServer() {
 			log.Print(err)
 			continue
 		}
+		AddUser(name, conn)
 		go handleConn(conn)
 		log.Println("connection made")
+
 	}
+}
+
+// AddUser adds users to this session of the
+func AddUser(name string, conn net.Conn) {
+	users[conn] = name
 }

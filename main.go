@@ -3,7 +3,6 @@ package main
 //TODO:
 //allow only one used
 //add method for closing server
-//make setup script do that only client operation run manully
 import (
 	"flag"
 
@@ -14,16 +13,18 @@ func main() {
 
 	server := flag.Bool("server", false, "starts the server")
 
-	user := flag.Bool("user", false, "adds a chat client to the server")
+	client := flag.Bool("client", false, "adds a chat client to the server")
+
+	name := flag.String("username", "name", "the username of the chat server client")
 
 	flag.Parse()
 
-	if *user {
+	if *client {
 		svr.Client()
 		return
 	}
 	if *server {
-		svr.RunServer()
+		svr.RunServer(*name)
 	}
 
 }
