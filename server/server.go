@@ -6,7 +6,7 @@ import (
 	"log"
 	"net"
 
-	main "github.com/Soypete/goChatter/addUser"
+	"github.com/davecgh/go-spew/spew"
 )
 
 type client chan<- string
@@ -39,9 +39,12 @@ func broadcaster() {
 }
 
 func handleConn(conn net.Conn, ch chan string) {
-	go clientWriter(conn, ch)
+	spew.Fdump(conn, conn.LocalAddr().String())
+	who := Users[conn.LocalAddr().String()]
+	spew.Fdump(conn, who)
 
-	who := main.Users[conn]
+	go clientWriter(conn, ch, who)
+
 	ch <- "You are " + who
 	messages <- who + "has arrived"
 	messages <- who + " has arrived"
@@ -56,9 +59,9 @@ func handleConn(conn net.Conn, ch chan string) {
 
 }
 
-func clientWriter(conn net.Conn, ch <-chan string) {
+func clientWriter(conn net.Conn, ch <-chan string, name string) {
 	for msg := range ch {
-		newmsg := fmt.Sprintln(msg)
+		newmsg := fmt.Sprintf("%s: %s\n", name, msg)
 		fmt.Fprintln(conn, newmsg)
 	}
 }

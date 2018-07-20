@@ -20,7 +20,7 @@ func main() {
 	flag.Parse()
 
 	if *client {
-		svr.Client(name)
+		svr.Client(*name)
 		return
 	}
 	if *server {
