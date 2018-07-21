@@ -16,7 +16,6 @@ func Client() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	done := make(chan struct{})
 	go func() {
 		io.Copy(os.Stdout, conn)

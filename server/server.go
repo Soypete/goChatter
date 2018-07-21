@@ -16,6 +16,7 @@ var (
 	port     string
 	//Listener is what the clients connect to.
 	Listener net.Listener
+	users    = 1
 )
 
 // records list of active clients published messages
@@ -37,13 +38,14 @@ func broadcaster() {
 }
 
 func handleConn(conn net.Conn) {
+
+	var who string
 	ch := make(chan string)
 	go clientWriter(conn, ch)
-
-	who := conn.RemoteAddr().String()
+	who = fmt.Sprintf("USER%d", users)
 	ch <- "You are " + who
-	messages <- who + "has arrived"
 	messages <- who + " has arrived"
+	users++
 	incoming <- ch
 
 	input := bufio.NewScanner(conn)
@@ -80,6 +82,7 @@ func RunServer() {
 			log.Print(err)
 			continue
 		}
+
 		go handleConn(conn)
 		log.Println("connection made")
 	}
