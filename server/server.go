@@ -57,9 +57,10 @@ func handleConn(conn net.Conn) {
 
 }
 
-func clientWriter(conn net.Conn, ch <-chan string) {
+func clientWriter(conn net.Conn, ch <-chan string, name string) {
 	for msg := range ch {
-		fmt.Fprintln(conn, msg)
+		newmsg := fmt.Sprintf("%s: %s\n", name, msg)
+		fmt.Fprintln(conn, newmsg)
 	}
 }
 
@@ -85,5 +86,6 @@ func RunServer() {
 
 		go handleConn(conn)
 		log.Println("connection made")
+
 	}
 }

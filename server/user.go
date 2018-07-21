@@ -8,9 +8,16 @@ import (
 	"os"
 )
 
+var (
+	//Users list of usernames who have logged in to system
+	Users = make(map[string]string)
+)
+
 // Client creates a client that can chat on server
-func Client() {
+func Client(name string) {
 	url := fmt.Sprintf("localhost:8080")
+	fmt.Println(name)
+	fmt.Println(Users)
 
 	conn, err := net.Dial("tcp", url)
 	if err != nil {
